@@ -7,23 +7,74 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.awt.Component;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 import java.util.Random;
-import javax.swing.BoxLayout;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+
+import game.Menu;
 
 public class RegisterGUI extends JFrame {
+
     // Variables globales para almacenar el ID y nombre del jugador
-    private int playerID;
+    private static int playerID;
+
+    public static int getPlayerID() {
+        return playerID;
+    }
     private String playerName;
 
+    private Player player;
+
+    static class DatabaseHandler {
+        static final String JDBC_URL = "jdbc:mysql://localhost:3306/bomberman";
+        static final String USERNAME = "root"; // USER
+        static String PASSWORD = ""; // PASSWORD
+
+        // Insert a new player into the database
+        public static void insertPlayer(String playerName, int playerID) {
+            // Cargar el archivo de propiedades
+            Properties prop = new Properties();
+            try (InputStream input = new FileInputStream("src\\game\\config.properties")) {
+                prop.load(input);
+                PASSWORD = prop.getProperty("DB_PASSWORD");
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
+                System.out.println("Ingresado exitosamente a la base de datos");
+
+                // insert id and nickname
+                String query = "INSERT INTO players (id, nickname) VALUES (?, ?)";
+                PreparedStatement statement = connection.prepareStatement(query);
+                statement.setInt(1, playerID);
+                statement.setString(2, playerName);
+                statement.executeUpdate();
+
+                // Insert into matches
+
+                String query3 = "INSERT INTO matches (player_id, score, date) VALUES (?, 0, now())";
+                PreparedStatement statement3 = connection.prepareStatement(query3);
+                statement3.setInt(1, playerID);
+                statement3.executeUpdate();
+
+            } catch (SQLException e) {
+                System.out.println("Error al conectar con la base de datos: " + e.getMessage());
+            }
+        }
+
+    }
+
     public RegisterGUI() {
+
         // Propiedades de la ventana
         setTitle("Register");
         setSize(375, 265);
@@ -78,9 +129,10 @@ public class RegisterGUI extends JFrame {
         generarID.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                playerID = generateRandomID();//
-                generadordeID.setText(String.valueOf(generateRandomID()));
-                continuar.setEnabled(true);//
+                playerID = generateRandomID();
+                generadordeID.setText(String.valueOf(playerID));
+
+                // continuar.setEnabled(true);//
             }
         });
         //
@@ -89,13 +141,24 @@ public class RegisterGUI extends JFrame {
 
             public void actionPerformed(ActionEvent e) {
                 // Guardar el nombre y ID del jugador en las variables
-                playerName = nombreUsuario.getText();//
-                Engine.startGame(playerID, playerName); // Llama a startGame() cuando se hace clic en el botón
+                playerName = nombreUsuario.getText();
+                if (playerName.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid name", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                } else {
 
-                System.out.println(playerID);
-                System.out.println(playerName);
+                    Engine.startGame(playerID, playerName); // Llama a startGame() cuando se hace clic en el botón
 
-                dispose();
+
+                    System.out.println("\nPlayer ID: " + playerID);
+                    System.out.println("Player Name: " + playerName);
+
+                    // Insert player into database
+                    DatabaseHandler.insertPlayer(playerName, playerID);
+
+                    dispose();
+                }
             }
 
         });
@@ -133,6 +196,6 @@ public class RegisterGUI extends JFrame {
     private int generateRandomID() {
         // Generate a random integer
         Random random = new Random();
-        return random.nextInt(100000); // Adjust the upper bound as needed
+        return random.nextInt(1000000000); // Adjust the upper bound as needed
     }
 }

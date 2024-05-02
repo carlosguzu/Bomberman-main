@@ -2,8 +2,14 @@ package game;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public final class Engine {
 
@@ -13,24 +19,12 @@ public final class Engine {
 	private static int nrOfEnemies = 5;
 	private static Timer clockTimer = null;
 
-	private static int playerID;
-	private static String playerName;
 	private static int score;
 
 	public static void main(String[] args) {
 
-		try {
-			String url = "jdbc:mysql://localhost:3306/bombermandb";
-			String user = "root";
-			String password = "Me8uiE5oM&";
-			java.sql.Connection con = DriverManager.getConnection(url, user, password);
-			System.out.println("Conexión exitosa a la base de datos");
-		} catch (Exception e) {
-			System.out.println("Error al conectar a la base de datos: " + e.getMessage());
-		}
-
 		SwingUtilities.invokeLater(() -> new Menu().setVisible(true)); // Iniciar la interfaz gráfica en el hilo de
-																		// eventos
+		// eventos
 
 	}
 
@@ -40,6 +34,7 @@ public final class Engine {
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		floor.addFloorListener(frame.getBombermanComponent());
+		frame.setResizable(false);
 
 		Action doOneStep = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
@@ -60,20 +55,41 @@ public final class Engine {
 	 */
 
 	private static void gameOver(BombermanFrame frame, Floor floor) {
+
+		int playerID = RegisterGUI.getPlayerID();
+		// System.out.println(playerID);
 		clockTimer.stop();
 		frame.dispose();
-		SwingUtilities.invokeLater(() -> new Menu().setVisible(true));
+		SwingUtilities.invokeLater(() -> new GameOver().setVisible(true));
 		score = floor.getTotalScore();
-		/*
-		 * String sql = INSERT INTO Players(Score_Players) VALUES (?);
-		 * PreparedStatement pstmt = con.prepareStatement(sql);
-		 * pstmt.setInt(1, score);
-		 * pstmt.executeUpdate();
-		 */
-		System.out.println(score);
-		// System.out.println(playerID + floor.nombreUsuario(playerName));
-		// Print player ID and name
-		// System.out.println("Player ID: " + playerID + ", Name: " + );
+
+		// Insert player score into database
+
+		final String JDBC_URL = "jdbc:mysql://localhost:3306/bomberman";
+		final String USERNAME = "root";
+		String PASSWORD = "";
+		// Cargar el archivo de propiedades
+		Properties prop = new Properties();
+		try (InputStream input = new FileInputStream("src\\game\\config.properties")) {
+			prop.load(input);
+			PASSWORD = prop.getProperty("DB_PASSWORD");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		
+		try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
+			String query = "UPDATE matches SET score =? WHERE player_id =?";
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, score);
+			statement.setInt(2, playerID);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Error al insertar el puntaje del jugador: " + e.getMessage());
+		}
+
+		System.out.println("Score: "+score);
+
 	}
 
 	private static void tick(BombermanFrame frame, Floor floor) {
@@ -91,4 +107,5 @@ public final class Engine {
 			floor.notifyListeners();
 		}
 	}
+
 }
