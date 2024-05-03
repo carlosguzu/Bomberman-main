@@ -15,7 +15,8 @@ public class Credits extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 400);
         setBackground(Color.BLACK);
-        setResizable(false);
+        setResizable(false);        
+        setLocationRelativeTo(null);
 
         JPanel creditsPanel = new JPanel();
         creditsPanel.setBackground(Color.BLACK);

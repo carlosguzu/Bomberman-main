@@ -1,6 +1,5 @@
 package game;
 
-import java.awt.Font;
 import javax.swing.*;
 
 import javax.swing.*;
@@ -14,7 +13,8 @@ public class NextLevel extends JFrame {
         setTitle("¡LEVEL COMPLETE!");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
-        setBackground(Color.BLACK);
+        setBackground(Color.BLACK);        
+        setLocationRelativeTo(null);
 
         // Crear un panel para el contenido
         JPanel panelContenido = new JPanel();

@@ -79,7 +79,8 @@ public class RegisterGUI extends JFrame {
         setTitle("Register");
         setSize(375, 265);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+        setResizable(false);        
+        setLocationRelativeTo(null);
 
         // Panel principal
         JPanel panel = new JPanel();

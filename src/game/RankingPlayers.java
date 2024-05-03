@@ -77,7 +77,8 @@ public class RankingPlayers extends JFrame {
         setTitle("Ranking Of Players");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
+        setResizable(false);        
+        setLocationRelativeTo(null);
 
         // Inicialización de componentes
         panelPrincipal = new JPanel();

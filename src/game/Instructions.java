@@ -12,7 +12,8 @@ public class Instructions extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setBackground(Color.BLACK);
-        setResizable(false);
+        setResizable(false);        
+        setLocationRelativeTo(null);
 
     
         JPanel instructionPanel = new JPanel();

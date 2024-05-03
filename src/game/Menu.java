@@ -15,12 +15,14 @@ public class Menu extends JFrame {
         setBackground(Color.BLACK);
         //bloqeuar 
         setResizable(false);
+        setLocationRelativeTo(null);
 
         // Crear un panel para el contenido
         JPanel panelContenido = new JPanel();
         panelContenido.setBackground(Color.BLACK);
         panelContenido.setLayout(new BorderLayout());
         panelContenido.setAlignmentX(Component.CENTER_ALIGNMENT);
+        
 
         // Crear un JLabel para el título
         JLabel titulo = new JLabel("Bomberman 1.0");
