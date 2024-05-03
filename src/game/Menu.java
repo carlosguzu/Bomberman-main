@@ -13,6 +13,7 @@ public class Menu extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
         setBackground(Color.BLACK);
+        //bloqeuar 
         setResizable(false);
 
         // Crear un panel para el contenido
@@ -21,21 +22,9 @@ public class Menu extends JFrame {
         panelContenido.setLayout(new BorderLayout());
         panelContenido.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Cargar la imagen de fondo
-        ImageIcon imageIcon = new ImageIcon("src/game/background.png"); // Reemplaza con la ruta de tu imagen
-        Image image = imageIcon.getImage().getScaledInstance(this.getWidth(), this.getHeight(), Image.SCALE_DEFAULT);
-        JLabel background = new JLabel(new ImageIcon(image));
-
-        // Asegúrate de que el fondo sea el componente más bajo
-        panelContenido.add(background);
-        background.setBounds(0, 0, this.getWidth(), this.getHeight());
-
-        // Asegúrate de que los componentes se dibujen en la parte superior del fondo
-        panelContenido.setComponentZOrder(background, panelContenido.getComponentCount() - 1);
-
         // Crear un JLabel para el título
         JLabel titulo = new JLabel("Bomberman 1.0");
-        titulo.setFont(new Font("Arial", Font.BOLD, 36));
+        titulo.setFont(new Font("Arial", Font.BOLD, 36)); 
         titulo.setForeground(Color.WHITE);
         titulo.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -45,10 +34,11 @@ public class Menu extends JFrame {
         panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
 
         // Crear botones "Comenzar juego", "Ranking Of Players" y "Salir del juego"
-        JButton botonComenzar = new JButton("Start Game");
+        
+        JButton botonComenzar = new JButton("Start Game 💣");
         botonComenzar.setBackground(Color.WHITE);
         botonComenzar.setForeground(Color.BLACK);
-        botonComenzar.setFont(new Font("Arial", Font.BOLD, 24));
+        botonComenzar.setFont(botonComenzar.getFont().deriveFont(Font.BOLD, 24)); 
         botonComenzar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         botonComenzar.addActionListener(new ActionListener() {
@@ -58,10 +48,10 @@ public class Menu extends JFrame {
             }
         });
 
-        JButton botonRanking = new JButton("Ranking Of Players");
+        JButton botonRanking = new JButton("Ranking Of Players 🏆");
         botonRanking.setBackground(Color.WHITE);
         botonRanking.setForeground(Color.BLACK);
-        botonRanking.setFont(new Font("Arial", Font.BOLD, 24));
+        botonRanking.setFont(botonRanking.getFont().deriveFont(Font.BOLD, 24)); 
         botonRanking.setAlignmentX(Component.CENTER_ALIGNMENT);
         botonRanking.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -69,10 +59,10 @@ public class Menu extends JFrame {
                 dispose();
             }
         });
-        JButton BotonCreditos = new JButton("Credits");
+        JButton BotonCreditos = new JButton("Credits 👥");
         BotonCreditos.setBackground(Color.WHITE);
         BotonCreditos.setForeground(Color.BLACK);
-        BotonCreditos.setFont(new Font("Arial", Font.BOLD, 24));
+        BotonCreditos.setFont(BotonCreditos.getFont().deriveFont(Font.BOLD, 24)); 
         BotonCreditos.setAlignmentX(Component.CENTER_ALIGNMENT);
         BotonCreditos.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -80,17 +70,17 @@ public class Menu extends JFrame {
                 dispose();
             }
         });
-        JButton botonSalir = new JButton("Exit Game");
+        JButton botonSalir = new JButton("Exit Game ✖️");
         botonSalir.setBackground(Color.WHITE);
         botonSalir.setForeground(Color.BLACK);
-        botonSalir.setFont(new Font("Arial", Font.BOLD, 24));
+        botonSalir.setFont(botonSalir.getFont().deriveFont(Font.BOLD, 24)); 
         botonSalir.setAlignmentX(Component.CENTER_ALIGNMENT);
         botonSalir.addActionListener(e -> System.exit(0));
         // Creacion del boton JButton
-        JButton topRightButton = new JButton("Instructions");
+        JButton topRightButton = new JButton("Instructions 📜");
         topRightButton.setBackground(Color.WHITE);
-        topRightButton.setForeground(Color.BLACK);
-        topRightButton.setFont(new Font("Arial", Font.BOLD, 24));
+        topRightButton.setForeground(Color.BLACK); 
+        topRightButton.setFont(topRightButton.getFont().deriveFont(Font.BOLD, 24)); 
         topRightButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         topRightButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
