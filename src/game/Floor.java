@@ -19,6 +19,7 @@ public class Floor {
 	private Collection<Bomb> explosionList = new ArrayList<>();
 	private Collection<Explosion> explosionCoords = new ArrayList<>();
 	private boolean isGameOver = false;
+	private boolean isNextLevel = false;
 
 	//
 	private int score; // Variable para almacenar el puntaje
@@ -81,6 +82,14 @@ public class Floor {
 		isGameOver = value;
 	}
 
+
+	public boolean getIsNextLevel() {
+		return isNextLevel;
+	}
+
+	public void setIsNextLevel(boolean value) {
+		isNextLevel = value;
+	}
 	public void addToBombList(Bomb bomb) {
 		bombList.add(bomb);
 	}
@@ -95,7 +104,7 @@ public class Floor {
 
 	public void moveEnemies() {
 		if (enemyList.isEmpty()) {
-			isGameOver = true;
+			isNextLevel = true;
 		}
 		for (Enemy e : enemyList) {
 			Move currentDirection = e.getCurrentDirection();

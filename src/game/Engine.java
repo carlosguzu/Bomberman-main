@@ -53,6 +53,7 @@ public final class Engine {
 	 * startGame();
 	 * }
 	 */
+	
 
 	private static void gameOver(BombermanFrame frame, Floor floor) {
 
@@ -77,7 +78,6 @@ public final class Engine {
 			ex.printStackTrace();
 		}
 
-		
 		try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
 			String query = "UPDATE matches SET score =? WHERE player_id =?";
 			PreparedStatement statement = connection.prepareStatement(query);
@@ -88,17 +88,51 @@ public final class Engine {
 			System.out.println("Error al insertar el puntaje del jugador: " + e.getMessage());
 		}
 
-		System.out.println("Score: "+score);
+		System.out.println("Score final (por game over): " + score);
+
+	}
+
+	private static void nextLevel(BombermanFrame frame, Floor floor) {
+		int playerID = RegisterGUI.getPlayerID();
+		clockTimer.stop();
+		frame.dispose();
+		SwingUtilities.invokeLater(() -> new NextLevel().setVisible(true));		
+		score = floor.getTotalScore(); 
+		// Insert player score into database
+		
+		final String JDBC_URL = "jdbc:mysql://localhost:3306/bomberman";
+		final String USERNAME = "root";
+		String PASSWORD = "";
+		// Cargar el archivo de propiedades
+		Properties prop = new Properties();
+		try (InputStream input = new FileInputStream("src\\game\\config.properties")) {
+			prop.load(input);
+			PASSWORD = prop.getProperty("DB_PASSWORD");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+
+		try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
+			String query = "UPDATE matches SET score =? WHERE player_id =?";
+			PreparedStatement statement = connection.prepareStatement(query);
+			statement.setInt(1, score);
+			statement.setInt(2, playerID);
+			statement.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("Error al insertar el puntaje del jugador: " + e.getMessage());
+		}
+		
+		System.out.println("\nScore del nivel: " + score); // debe ser acumulativo
 
 	}
 
 	private static void tick(BombermanFrame frame, Floor floor) {
 		if (floor.getIsGameOver()) {
 			gameOver(frame, floor);
-			/*
-			 * } else if (floor.getIsNextLevel()){
-			 * nextLevel(frame, floor);
-			 */
+
+		} else if (floor.getIsNextLevel()) {
+			nextLevel(frame, floor);
+
 		} else {
 			floor.moveEnemies();
 			floor.bombCountdown();
