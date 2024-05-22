@@ -13,7 +13,7 @@ public class NextLevel extends JFrame {
         setTitle("¡LEVEL COMPLETE!");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(600, 400);
-        setBackground(Color.BLACK);        
+        setBackground(Color.BLACK);
         setLocationRelativeTo(null);
 
         // Crear un panel para el contenido
@@ -21,6 +21,9 @@ public class NextLevel extends JFrame {
         panelContenido.setBackground(Color.BLACK);
         panelContenido.setLayout(new BorderLayout());
         panelContenido.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // Crear un espacio vacío
+        Component espacio = Box.createRigidArea(new Dimension(0, 50));
 
         // Crear un JLabel para el título
         JLabel titulo = new JLabel("¡LEVEL COMPLETE!");
@@ -58,6 +61,8 @@ public class NextLevel extends JFrame {
         botonMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> new Menu().setVisible(true)); // Ir al menú
+                System.out.println("Score final: " + Engine.cumulativeScore);
+                Engine.cumulativeScore = 0; // Reiniciar el puntaje acumulativo
                 dispose();
             }
         });
@@ -70,6 +75,9 @@ public class NextLevel extends JFrame {
         panelBotones.add(Box.createVerticalGlue());
 
         // Agregar el título y los botones al panel de contenido
+
+        // Agregar el espacio y el título al panel de contenido
+        panelContenido.add(espacio, BorderLayout.NORTH);
         panelContenido.add(titulo, BorderLayout.NORTH);
         panelContenido.add(panelBotones, BorderLayout.CENTER);
 

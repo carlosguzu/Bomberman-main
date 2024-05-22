@@ -54,6 +54,9 @@ public final class Engine {
 	 * }
 	 */
 	
+	public static int cumulativeScore = 0; // Variable para almacenar el puntaje acumulativo
+
+
 
 	private static void gameOver(BombermanFrame frame, Floor floor) {
 
@@ -63,6 +66,7 @@ public final class Engine {
 		frame.dispose();
 		SwingUtilities.invokeLater(() -> new GameOver().setVisible(true));
 		score = floor.getTotalScore();
+		cumulativeScore += score; // Actualiza el puntaje acumulativo
 
 		// Insert player score into database
 
@@ -81,14 +85,16 @@ public final class Engine {
 		try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
 			String query = "UPDATE matches SET score =? WHERE player_id =?";
 			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setInt(1, score);
+			statement.setInt(1, cumulativeScore);
 			statement.setInt(2, playerID);
 			statement.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Error al insertar el puntaje del jugador: " + e.getMessage());
 		}
 
-		System.out.println("Score final (por game over): " + score);
+		System.out.println("\nScore del nivel: " + score); 
+		System.out.println("Score final (por game over): " + cumulativeScore);
+		cumulativeScore = 0; // Reiniciar el puntaje acumulativo
 
 	}
 
@@ -98,6 +104,8 @@ public final class Engine {
 		frame.dispose();
 		SwingUtilities.invokeLater(() -> new NextLevel().setVisible(true));		
 		score = floor.getTotalScore(); 
+        cumulativeScore += score; // Actualiza el puntaje acumulativo
+
 		// Insert player score into database
 		
 		final String JDBC_URL = "jdbc:mysql://localhost:3306/bomberman";
@@ -115,7 +123,7 @@ public final class Engine {
 		try (Connection connection = DriverManager.getConnection(JDBC_URL, USERNAME, PASSWORD)) {
 			String query = "UPDATE matches SET score =? WHERE player_id =?";
 			PreparedStatement statement = connection.prepareStatement(query);
-			statement.setInt(1, score);
+			statement.setInt(1, cumulativeScore);
 			statement.setInt(2, playerID);
 			statement.executeUpdate();
 		} catch (SQLException e) {
