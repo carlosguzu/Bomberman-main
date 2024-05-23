@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import java.awt.*;
+
 public final class Engine {
 
 	private static final int TIME_STEP = 30;
@@ -30,7 +32,7 @@ public final class Engine {
 
 	public static void startGame(int playerID, String playerName) {
 		Floor floor = new Floor(width, height, nrOfEnemies);
-		BombermanFrame frame = new BombermanFrame("Bomberman", floor);
+		BombermanFrame frame = new BombermanFrame("Bomberman", floor, playerName);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		floor.addFloorListener(frame.getBombermanComponent());
@@ -39,6 +41,7 @@ public final class Engine {
 		Action doOneStep = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				tick(frame, floor);
+				frame.floorChanged(); // Notifica a la UI para que actualice el puntaje
 			}
 		};
 		clockTimer = new Timer(TIME_STEP, doOneStep);
@@ -130,7 +133,7 @@ public final class Engine {
 			System.out.println("Error al insertar el puntaje del jugador: " + e.getMessage());
 		}
 		
-		System.out.println("\nScore del nivel: " + score); // debe ser acumulativo
+		System.out.println("\nScore del nivel: " + score); 
 
 	}
 
@@ -147,6 +150,13 @@ public final class Engine {
 			floor.explosionHandler();
 			floor.characterInExplosion();
 			floor.notifyListeners();
+
+
+			
+            // int scoreIncrement = floor.getScoreIncrement();
+            // cumulativeScore += scoreIncrement;
+            // floor.addScore(scoreIncrement); // Actualiza el puntaje total del floor
+
 		}
 	}
 

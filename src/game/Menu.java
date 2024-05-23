@@ -16,7 +16,8 @@ public class Menu extends JFrame {
             // Crear un panel de fondo personalizado
 
             
-            BackgroundPanel panelContenido = new BackgroundPanel("src/backgrounds/background4 (1).jpeg"); // Reemplaza con la ruta de tu imagen
+
+            BackgroundPanel panelContenido = new BackgroundPanel("src/backgrounds/bomb1.png"); // Reemplaza con la ruta de tu imagen
             panelContenido.setLayout(new BorderLayout());
     
             // Crear un JLabel para el título

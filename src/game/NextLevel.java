@@ -44,8 +44,8 @@ public class NextLevel extends JFrame {
         botonComenzar.setAlignmentX(Component.CENTER_ALIGNMENT);
         botonComenzar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                int playerID = 238/* Obtener ID del jugador */;
-                String playerName = "juan"/* Obtener nombre del jugador */;
+                int playerID = RegisterGUI.getPlayerID();
+                String playerName = RegisterGUI.getPlayerName();
 
                 // Iniciar el iguiente nivel utilizando el ID y el nombre del jugador
                 Engine.startGame(playerID, playerName);

@@ -25,11 +25,15 @@ public class RegisterGUI extends JFrame {
 
     // Variables globales para almacenar el ID y nombre del jugador
     private static int playerID;
+    private static String playerName;
 
     public static int getPlayerID() {
         return playerID;
     }
-    private String playerName;
+
+    public static String getPlayerName() {
+        return playerName;
+    }
 
     private Player player;
 
@@ -198,4 +202,6 @@ public class RegisterGUI extends JFrame {
         Random random = new Random();
         return random.nextInt(1000000000); // Adjust the upper bound as needed
     }
+
+   
 }
